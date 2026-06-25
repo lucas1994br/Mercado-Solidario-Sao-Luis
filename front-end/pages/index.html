@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Solidário São-Luís</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+
+    <!-- Container Principal -->
+    <div id="app-container">
+        
+        <!-- TELA 1: CADASTRO -->
+        <section id="screen-register" class="screen active">
+            <div class="logo-mercado">
+                <div class="icon">🤲</div>
+                <h1>Mercado Solidário<br>São-Luís</h1>
+            </div>
+
+            <div class="register-container">
+                <div class="form-header">
+                    <h2>Faça seu Cadastro</h2>
+                    <p>Junte-se a nós para ajudar a comunidade.</p>
+                </div>
+
+                <form id="register-form" novalidate>
+                    <div class="input-group">
+                        <label for="name">Nome completo</label>
+                        <input type="text" id="name" placeholder="Ex: Maria da Silva" autocomplete="name">
+                        <span class="error-message">Por favor, insira seu nome completo.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" placeholder="exemplo@email.com" autocomplete="email">
+                        <span class="error-message">Insira um e-mail válido.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" placeholder="(00) 00000-0000" autocomplete="tel">
+                        <span class="error-message">Insira um telefone para contato.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="address">Endereço completo</label>
+                        <textarea id="address" placeholder="Rua, Número, Bairro, Cidade - Estado"></textarea>
+                        <span class="error-message">O endereço é obrigatório.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" placeholder="Mínimo 6 caracteres">
+                        <span class="error-message">A senha deve ter no mínimo 6 caracteres.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirm-password">Confirmar Senha</label>
+                        <input type="password" id="confirm-password" placeholder="Repita a senha">
+                        <span class="error-message">As senhas não coincidem.</span>
+                    </div>
+
+                    <button type="submit" class="btn">Cadastrar</button>
+                    <button type="button" class="btn btn-outline" id="btn-show-login" style="margin-top: 10px;">Já tenho conta (Login)</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- TELA 1.5: LOGIN (Nova tela para consumir a API de Login) -->
+        <section id="screen-login" class="screen">
+            <div class="logo-mercado">
+                <div class="icon">🤲</div>
+                <h1>Mercado Solidário<br>São-Luís</h1>
+            </div>
+
+            <div class="register-container">
+                <div class="form-header">
+                    <h2>Login</h2>
+                    <p>Acesse seu painel.</p>
+                </div>
+
+                <form id="login-form" novalidate>
+                    <div class="input-group">
+                        <label for="login-email">E-mail</label>
+                        <input type="email" id="login-email" placeholder="exemplo@email.com">
+                        <span class="error-message">Insira um e-mail válido.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="login-password">Senha</label>
+                        <input type="password" id="login-password" placeholder="Sua senha">
+                        <span class="error-message">A senha é obrigatória.</span>
+                    </div>
+
+                    <button type="submit" class="btn">Entrar</button>
+                    <button type="button" class="btn btn-outline" id="btn-show-register" style="margin-top: 10px;">Voltar para Cadastro</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- TELA 2: PAINEL DO USUÁRIO -->
+        <section id="screen-panel" class="screen">
+            <div class="panel-container">
+                
+                <div class="panel-header">
+                    <div>
+                        <h2 class="welcome-text">Olá, <span id="user-name-display">Usuário</span>!</h2>
+                        <p>Obrigado por fazer parte dessa corrente do bem.</p>
+                    </div>
+                    <button id="btn-logout" class="btn btn-outline" style="width: auto; background: white;">Sair</button>
+                </div>
+
+                <h3 class="points-section-title">📍 Pontos de Coleta Próximos</h3>
+                
+                <div class="points-grid" id="points-grid-container">
+                    <!-- Cards de pontos serão renderizados aqui pela API -->
+                    <p>Carregando pontos de coleta...</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Alerta Customizado -->
+    <div id="custom-alert" class="custom-alert">
+        <div id="alert-icon">✅</div>
+        <div id="alert-message">Operação realizada com sucesso!</div>
+    </div>
+
+    <!-- Theme Toggle -->
+    <button id="theme-toggle" class="theme-toggle" aria-label="Alternar tema">
+        <span id="theme-icon-light" style="display:none;">☀️</span>
+        <span id="theme-icon-dark">🌙</span>
+    </button>
+
+    <footer>
+        <p style="color: #666; font-size: 0.9rem;">Desenvolvido por</p>
+        <div class="infinity-devs-logo">
+            <div class="infinity-symbol">
+                <span class="bracket">{</span>
+                <span class="icon">&infin;</span>
+                <span class="bracket">}</span>
+            </div>
+            <div class="infinity-text">
+                Infinity<span class="blue">Devs</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts da Aplicação -->
+    <script src="../js/api.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

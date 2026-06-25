@@ -1,0 +1,407 @@
+        /* =========================================
+           VARIÁVEIS DE COR E IDENTIDADE VISUAL
+           ========================================= */
+        :root {
+            --color-black: #040508;
+            --color-blue-1: #316BC5;
+            --color-blue-2: #508FDF;
+            --color-white: #FEFEFE;
+            --color-error: #e74c3c;
+            --color-success: #2ecc71;
+            
+            --gradient-blue: linear-gradient(135deg, var(--color-blue-1), var(--color-blue-2));
+            --shadow-sm: 0 4px 6px rgba(4, 5, 8, 0.05);
+            --shadow-md: 0 10px 25px rgba(4, 5, 8, 0.08);
+            --shadow-lg: 0 20px 40px rgba(4, 5, 8, 0.12);
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* =========================================
+           TEMA DARK
+           ========================================= */
+        body.dark-mode {
+            --color-black: #FEFEFE;
+            --color-white: #121212;
+            --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        body.dark-mode .input-group input,
+        body.dark-mode .input-group textarea {
+            background-color: #1e1e1e;
+            border-color: #333;
+            color: #FEFEFE;
+        }
+
+        body.dark-mode .register-container,
+        body.dark-mode .point-card,
+        body.dark-mode footer,
+        body.dark-mode .custom-alert {
+            background-color: #1e1e1e;
+            border-color: #333;
+        }
+        
+        body.dark-mode .btn-location {
+            background-color: #2a2a2a;
+            border-color: #444;
+            color: #FEFEFE;
+        }
+        
+        body.dark-mode .info-item {
+            color: #ccc;
+        }
+        
+        body.dark-mode .form-header p,
+        body.dark-mode footer p {
+            color: #aaa !important;
+        }
+
+        /* Toggle de Tema */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--color-white);
+            color: var(--color-black);
+            border: 1px solid rgba(128, 128, 128, 0.2);
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            transition: var(--transition-smooth);
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        body.dark-mode .theme-toggle {
+            background: #2a2a2a;
+            border-color: #444;
+        }
+
+        /* =========================================
+           RESET E ESTILOS GLOBAIS
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--color-white);
+            color: var(--color-black);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Container Principal com Transição de Telas */
+        #app-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100%;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+        }
+
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        /* =========================================
+           TELA 1: CADASTRO
+           ========================================= */
+        .register-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(4, 5, 8, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decoração de fundo do card */
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--gradient-blue);
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* =========================================
+           TELA 2: PAINEL DO USUÁRIO
+           ========================================= */
+        .panel-container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--gradient-blue);
+            border-radius: var(--radius-lg);
+            color: var(--color-white);
+            box-shadow: var(--shadow-md);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .panel-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .welcome-text {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .points-section-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-black);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .points-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* =========================================
+           RODAPÉ E LOGO INFINITY DEVS
+           ========================================= */
+        footer {
+            margin-top: auto;
+            padding: 2rem 1rem;
+            text-align: center;
+            background-color: var(--color-white);
+            border-top: 1px solid rgba(4, 5, 8, 0.05);
+        }
+
+        .infinity-devs-logo {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .infinity-symbol {
+            font-size: 2.5rem;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            color: var(--color-black);
+            line-height: 1;
+        }
+        
+        .infinity-symbol .bracket {
+            font-weight: 100;
+            font-size: 3rem;
+            color: var(--color-black);
+        }
+
+        .infinity-symbol .icon {
+            background: var(--gradient-blue);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 3.5rem;
+            margin: 0 0.2rem;
+            margin-top: -5px;
+        }
+
+        .infinity-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--color-black);
+        }
+
+        .infinity-text .blue {
+            color: var(--color-blue-1);
+        }
+
+        /* =========================================
+           ANIMAÇÕES E ALERTS
+           ========================================= */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* =========================================
+           RESPONSIVIDADE (MEDIA QUERIES COMPLETA)
+           ========================================= */
+        
+        /* Monitores Grandes (Telas Ultra Wide / Desktops Grandes) */
+        @media (min-width: 1440px) {
+            .panel-container {
+                max-width: 1000px;
+            }
+            .points-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            }
+        }
+
+        /* Laptops e Notebooks (1024px e abaixo) */
+        @media (max-width: 1024px) {
+            .register-container {
+                padding: 2rem;
+            }
+            .points-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
+            .panel-header h2 {
+                font-size: 1.3rem;
+            }
+            .welcome-text {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Tablets e iPads (768px e abaixo) */
+        @media (max-width: 768px) {
+            .panel-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1.5rem;
+            }
+            .logo-mercado .icon {
+                font-size: 2.5rem;
+            }
+            .logo-mercado h1 {
+                font-size: 1.3rem;
+            }
+            .points-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        /* Smartphones Padrão e Telas Menores (600px e abaixo) */
+        @media (max-width: 600px) {
+            .screen {
+                padding: 1.5rem 0.8rem;
+            }
+            .register-container {
+                padding: 1.5rem 1rem;
+                border-radius: var(--radius-md);
+            }
+            .form-header h2 {
+                font-size: 1.3rem;
+            }
+            .input-group label {
+                font-size: 0.85rem;
+            }
+            .input-group input,
+            .input-group textarea {
+                padding: 0.8rem;
+                font-size: 0.95rem;
+            }
+            .btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.95rem;
+            }
+            .welcome-text {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Smartphones Muito Pequenos (iPhone SE, Galaxy Fold - 375px e abaixo) */
+        @media (max-width: 375px) {
+            .logo-mercado .icon {
+                font-size: 2rem;
+            }
+            .logo-mercado h1 {
+                font-size: 1.1rem;
+            }
+            .points-grid {
+                grid-template-columns: 1fr;
+            }
+            .infinity-symbol .icon {
+                font-size: 2.8rem;
+            }
+            .custom-alert {
+                width: 90%;
+                right: 5%;
+                font-size: 0.85rem;
+                padding: 0.8rem 1rem;
+            }
+        }

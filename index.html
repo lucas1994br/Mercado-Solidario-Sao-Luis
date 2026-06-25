@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Solidário São-Luís</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           VARIÁVEIS DE COR E IDENTIDADE VISUAL
+           ========================================= */
+        :root {
+            --color-black: #040508;
+            --color-blue-1: #316BC5;
+            --color-blue-2: #508FDF;
+            --color-white: #FEFEFE;
+            --color-error: #e74c3c;
+            --color-success: #2ecc71;
+            
+            --gradient-blue: linear-gradient(135deg, var(--color-blue-1), var(--color-blue-2));
+            --shadow-sm: 0 4px 6px rgba(4, 5, 8, 0.05);
+            --shadow-md: 0 10px 25px rgba(4, 5, 8, 0.08);
+            --shadow-lg: 0 20px 40px rgba(4, 5, 8, 0.12);
+            --radius-md: 12px;
+            --radius-lg: 24px;
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* =========================================
+           RESET E ESTILOS GLOBAIS
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--color-white);
+            color: var(--color-black);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Container Principal com Transição de Telas */
+        #app-container {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100%;
+            padding: 2rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+        }
+
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            position: relative;
+        }
+
+        /* =========================================
+           COMPONENTES COMUNS (Logos, Botões, etc)
+           ========================================= */
+        .logo-mercado {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .logo-mercado .icon {
+            font-size: 3rem;
+            background: var(--gradient-blue);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-mercado h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--color-black);
+        }
+
+        .btn {
+            background: var(--gradient-blue);
+            color: var(--color-white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            width: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(49, 107, 197, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(49, 107, 197, 0.5);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--color-blue-1);
+            border: 2px solid var(--color-blue-1);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: rgba(49, 107, 197, 0.05);
+            box-shadow: none;
+        }
+
+        /* =========================================
+           TELA 1: CADASTRO
+           ========================================= */
+        .register-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem 2rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(4, 5, 8, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decoração de fundo do card */
+        .register-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--gradient-blue);
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-black);
+        }
+
+        .input-group input,
+        .input-group textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            background-color: var(--color-white);
+            color: var(--color-black);
+            transition: var(--transition-smooth);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--color-blue-1);
+            box-shadow: 0 0 0 4px rgba(49, 107, 197, 0.1);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .error-message {
+            color: var(--color-error);
+            font-size: 0.8rem;
+            margin-top: 0.4rem;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .input-group.error input,
+        .input-group.error textarea {
+            border-color: var(--color-error);
+            background-color: rgba(231, 76, 60, 0.02);
+        }
+
+        .input-group.error .error-message {
+            display: block;
+        }
+
+        /* =========================================
+           TELA 2: PAINEL DO USUÁRIO
+           ========================================= */
+        .panel-container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--gradient-blue);
+            border-radius: var(--radius-lg);
+            color: var(--color-white);
+            box-shadow: var(--shadow-md);
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .panel-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .welcome-text {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .points-section-title {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-black);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .points-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .point-card {
+            background: var(--color-white);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(4, 5, 8, 0.05);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .point-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(49, 107, 197, 0.3);
+        }
+
+        .point-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--gradient-blue);
+            opacity: 0;
+            transition: var(--transition-smooth);
+        }
+
+        .point-card:hover::before {
+            opacity: 1;
+        }
+
+        .point-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--color-blue-1);
+        }
+
+        .point-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #444;
+        }
+
+        .info-item i {
+            margin-top: 0.2rem;
+        }
+
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            background: rgba(49, 107, 197, 0.1);
+            color: var(--color-blue-1);
+            font-weight: 600;
+        }
+
+        .btn-location {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--color-white);
+            color: var(--color-black);
+            border: 1px solid #ddd;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        .btn-location:hover {
+            border-color: var(--color-blue-1);
+            color: var(--color-blue-1);
+            background-color: rgba(49, 107, 197, 0.05);
+        }
+
+        /* =========================================
+           RODAPÉ E LOGO INFINITY DEVS
+           ========================================= */
+        footer {
+            margin-top: auto;
+            padding: 2rem 1rem;
+            text-align: center;
+            background-color: var(--color-white);
+            border-top: 1px solid rgba(4, 5, 8, 0.05);
+        }
+
+        .infinity-devs-logo {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .infinity-symbol {
+            font-size: 2.5rem;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            color: var(--color-black);
+            line-height: 1;
+        }
+        
+        .infinity-symbol .bracket {
+            font-weight: 100;
+            font-size: 3rem;
+            color: var(--color-black);
+        }
+
+        .infinity-symbol .icon {
+            background: var(--gradient-blue);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 3.5rem;
+            margin: 0 0.2rem;
+            margin-top: -5px;
+        }
+
+        .infinity-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--color-black);
+        }
+
+        .infinity-text .blue {
+            color: var(--color-blue-1);
+        }
+
+        /* =========================================
+           ANIMAÇÕES E ALERTS
+           ========================================= */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Alerta Customizado Simples */
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--color-white);
+            border-left: 4px solid var(--color-success);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateX(120%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .custom-alert.show {
+            transform: translateX(0);
+        }
+        
+        .custom-alert.info {
+            border-left-color: var(--color-blue-1);
+        }
+
+        /* =========================================
+           RESPONSIVIDADE
+           ========================================= */
+        @media (max-width: 600px) {
+            .panel-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .register-container {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container Principal -->
+    <div id="app-container">
+        
+        <!-- =========================================
+             TELA 1: CADASTRO
+             ========================================= -->
+        <section id="screen-register" class="screen active">
+            
+            <!-- Logo Mercado Solidário -->
+            <div class="logo-mercado">
+                <div class="icon">🤲</div>
+                <h1>Mercado Solidário<br>São-Luís</h1>
+            </div>
+
+            <div class="register-container">
+                <div class="form-header">
+                    <h2>Faça seu Cadastro</h2>
+                    <p>Junte-se a nós para ajudar a comunidade.</p>
+                </div>
+
+                <form id="register-form" novalidate>
+                    <div class="input-group">
+                        <label for="name">Nome completo</label>
+                        <input type="text" id="name" placeholder="Ex: Maria da Silva" autocomplete="name">
+                        <span class="error-message">Por favor, insira seu nome completo.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" placeholder="exemplo@email.com" autocomplete="email">
+                        <span class="error-message">Insira um e-mail válido.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" id="phone" placeholder="(00) 00000-0000" autocomplete="tel">
+                        <span class="error-message">Insira um telefone para contato.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="address">Endereço completo</label>
+                        <textarea id="address" placeholder="Rua, Número, Bairro, Cidade - Estado"></textarea>
+                        <span class="error-message">O endereço é obrigatório.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" placeholder="Mínimo 6 caracteres">
+                        <span class="error-message">A senha deve ter no mínimo 6 caracteres.</span>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="confirm-password">Confirmar Senha</label>
+                        <input type="password" id="confirm-password" placeholder="Repita a senha">
+                        <span class="error-message">As senhas não coincidem.</span>
+                    </div>
+
+                    <button type="submit" class="btn">Cadastrar</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- =========================================
+             TELA 2: PAINEL DO USUÁRIO
+             ========================================= -->
+        <section id="screen-panel" class="screen">
+            <div class="panel-container">
+                
+                <div class="panel-header">
+                    <div>
+                        <h2 class="welcome-text">Olá, <span id="user-name-display">Usuário</span>!</h2>
+                        <p>Obrigado por fazer parte dessa corrente do bem.</p>
+                    </div>
+                    <button id="btn-logout" class="btn btn-outline" style="width: auto; background: white;">Sair</button>
+                </div>
+
+                <h3 class="points-section-title">📍 Pontos de Coleta Próximos</h3>
+                
+                <div class="points-grid">
+                    <!-- Card 1 -->
+                    <div class="point-card">
+                        <h4 class="point-name">Igreja Matriz São-Luís</h4>
+                        <div class="point-info">
+                            <div class="info-item">
+                                <span>🗺️</span>
+                                <span>Praça Central, S/N - Centro</span>
+                            </div>
+                            <div class="info-item">
+                                <span>🕒</span>
+                                <span>Seg a Sex: 08h às 18h</span>
+                            </div>
+                            <div class="tag-group">
+                                <span class="tag">Alimentação</span>
+                                <span class="tag">Roupas</span>
+                            </div>
+                        </div>
+                        <button class="btn-location" onclick="showMapAlert('Igreja Matriz São-Luís')">
+                            🧭 Ver no mapa
+                        </button>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="point-card">
+                        <h4 class="point-name">Escola Municipal Esperança</h4>
+                        <div class="point-info">
+                            <div class="info-item">
+                                <span>🗺️</span>
+                                <span>Rua das Flores, 123 - Bairro Novo</span>
+                            </div>
+                            <div class="info-item">
+                                <span>🕒</span>
+                                <span>Seg a Sab: 07h às 17h</span>
+                            </div>
+                            <div class="tag-group">
+                                <span class="tag">Higiene</span>
+                                <span class="tag">Alimentação</span>
+                            </div>
+                        </div>
+                        <button class="btn-location" onclick="showMapAlert('Escola Municipal Esperança')">
+                            🧭 Ver no mapa
+                        </button>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="point-card">
+                        <h4 class="point-name">Centro Comunitário</h4>
+                        <div class="point-info">
+                            <div class="info-item">
+                                <span>🗺️</span>
+                                <span>Av. Principal, 500 - Zona Sul</span>
+                            </div>
+                            <div class="info-item">
+                                <span>🕒</span>
+                                <span>Ter a Dom: 09h às 20h</span>
+                            </div>
+                            <div class="tag-group">
+                                <span class="tag">Higiene</span>
+                                <span class="tag">Alimentação</span>
+                                <span class="tag">Roupas</span>
+                            </div>
+                        </div>
+                        <button class="btn-location" onclick="showMapAlert('Centro Comunitário')">
+                            🧭 Ver no mapa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Alerta Customizado -->
+    <div id="custom-alert" class="custom-alert">
+        <div id="alert-icon">✅</div>
+        <div id="alert-message">Operação realizada com sucesso!</div>
+    </div>
+
+    <!-- =========================================
+         RODAPÉ
+         ========================================= -->
+    <footer>
+        <p style="color: #666; font-size: 0.9rem;">Desenvolvido por</p>
+        <div class="infinity-devs-logo">
+            <div class="infinity-symbol">
+                <span class="bracket">{</span>
+                <span class="icon">&infin;</span>
+                <span class="bracket">}</span>
+            </div>
+            <div class="infinity-text">
+                Infinity<span class="blue">Devs</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =========================================
+         JAVASCRIPT
+         ========================================= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Elementos DOM
+            const form = document.getElementById('register-form');
+            const screenRegister = document.getElementById('screen-register');
+            const screenPanel = document.getElementById('screen-panel');
+            const btnLogout = document.getElementById('btn-logout');
+            const userNameDisplay = document.getElementById('user-name-display');
+            const customAlert = document.getElementById('custom-alert');
+            const alertMessage = document.getElementById('alert-message');
+            const alertIcon = document.getElementById('alert-icon');
+
+            // Função para alternar telas com transição
+            function switchScreen(fromScreen, toScreen) {
+                fromScreen.classList.remove('active');
+                
+                // Pequeno delay para a animação de saída antes da entrada
+                setTimeout(() => {
+                    toScreen.classList.add('active');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 300);
+            }
+
+            // Função para exibir alerta customizado
+            function showAlert(message, type = 'success') {
+                alertMessage.textContent = message;
+                
+                if (type === 'success') {
+                    customAlert.classList.remove('info');
+                    alertIcon.textContent = '✅';
+                } else if (type === 'info') {
+                    customAlert.classList.add('info');
+                    alertIcon.textContent = '🧭';
+                }
+
+                customAlert.classList.add('show');
+
+                // Ocultar após 3.5 segundos
+                setTimeout(() => {
+                    customAlert.classList.remove('show');
+                }, 3500);
+            }
+
+            // Expor showAlert para escopo global (para os botões do mapa)
+            window.showMapAlert = function(locationName) {
+                showAlert(`Abrindo rota para: ${locationName} (Simulação)`, 'info');
+            };
+
+            // Remover erro ao digitar
+            const inputs = form.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    input.parentElement.classList.remove('error');
+                });
+            });
+
+            // Validação de E-mail simples
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
+            // Submissão do Formulário de Cadastro
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let isValid = true;
+
+                // Capturar campos
+                const name = document.getElementById('name');
+                const email = document.getElementById('email');
+                const phone = document.getElementById('phone');
+                const address = document.getElementById('address');
+                const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('confirm-password');
+
+                // Resetar erros
+                document.querySelectorAll('.input-group').forEach(group => group.classList.remove('error'));
+
+                // Validação Nome
+                if (name.value.trim().length < 3) {
+                    name.parentElement.classList.add('error');
+                    isValid = false;
+                }
+
+                // Validação E-mail
+                if (!isValidEmail(email.value.trim())) {
+                    email.parentElement.classList.add('error');
+                    isValid = false;
+                }
+
+                // Validação Telefone
+                if (phone.value.trim().length < 8) {
+                    phone.parentElement.classList.add('error');
+                    isValid = false;
+                }
+
+                // Validação Endereço
+                if (address.value.trim().length < 5) {
+                    address.parentElement.classList.add('error');
+                    isValid = false;
+                }
+
+                // Validação Senha
+                if (password.value.length < 6) {
+                    password.parentElement.classList.add('error');
+                    isValid = false;
+                }
+
+                // Validação Confirmar Senha
+                if (password.value !== confirmPassword.value || confirmPassword.value === '') {
+                    confirmPassword.parentElement.classList.add('error');
+                    isValid = false;
+                }
+
+                // Se tudo estiver válido, prosseguir
+                if (isValid) {
+                    // Extrair primeiro nome para exibição
+                    const firstName = name.value.trim().split(' ')[0];
+                    userNameDisplay.textContent = firstName;
+
+                    showAlert('Cadastro realizado com sucesso!');
+                    
+                    // Transição para painel após um breve delay
+                    setTimeout(() => {
+                        switchScreen(screenRegister, screenPanel);
+                    }, 1000);
+                }
+            });
+
+            // Logout
+            btnLogout.addEventListener('click', () => {
+                form.reset(); // Limpa o formulário
+                switchScreen(screenPanel, screenRegister);
+            });
+        });
+    </script>
+</body>
+</html>
